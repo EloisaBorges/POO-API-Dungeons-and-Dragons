@@ -1,0 +1,547 @@
+/* ==========================================================================
+   Grimório de Magias — folha de estilo
+   ========================================================================== */
+
+:root {
+    --fundo: #14121a;
+    --fundo-painel: #1e1b27;
+    --fundo-carta: #241f2f;
+    --borda: #3a3350;
+    --texto: #ece7f5;
+    --texto-suave: #a79fbd;
+    --destaque: #c9a227;
+    --destaque-claro: #f0d572;
+    --roxo: #7a5cc4;
+    --perigo: #e06c75;
+    --sucesso: #7bc47f;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--fundo);
+    color: var(--texto);
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+}
+
+a {
+    color: var(--destaque-claro);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+code {
+    background: #100e15;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.85em;
+}
+
+/* ------------------------------- Topo ------------------------------- */
+
+.topo {
+    background: #100e15;
+    border-bottom: 2px solid var(--borda);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.topo-interno {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: var(--texto);
+}
+
+.marca:hover {
+    text-decoration: none;
+}
+
+.runa {
+    color: var(--destaque);
+    font-size: 1.4rem;
+}
+
+.menu {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.menu a {
+    color: var(--texto-suave);
+    padding: 7px 13px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+}
+
+.menu a:hover {
+    background: #1e1b27;
+    color: var(--texto);
+    text-decoration: none;
+}
+
+.menu a.ativo {
+    background: var(--roxo);
+    color: #fff;
+}
+
+.contador-preparadas {
+    display: inline-block;
+    min-width: 20px;
+    text-align: center;
+    background: var(--destaque);
+    color: #201a05;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0 6px;
+    margin-left: 4px;
+}
+
+/* ------------------------------ Conteúdo ------------------------------ */
+
+.conteudo {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 26px 20px 60px;
+}
+
+.conteudo.estreito {
+    max-width: 780px;
+}
+
+h1 {
+    margin: 0 0 4px;
+    font-size: 1.75rem;
+    letter-spacing: 0.3px;
+}
+
+h2 {
+    font-size: 1.15rem;
+    margin: 22px 0 6px;
+    color: var(--destaque-claro);
+}
+
+.legenda {
+    color: var(--texto-suave);
+    margin: 0;
+    font-size: 0.93rem;
+}
+
+.cabecalho-pagina {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.acoes-cabecalho {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* ------------------------------ Painéis ------------------------------ */
+
+.painel {
+    background: var(--fundo-painel);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: flex-end;
+    margin-bottom: 22px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 150px;
+}
+
+.campo.cresce {
+    flex: 1;
+}
+
+.linha {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+label,
+legend {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--texto-suave);
+}
+
+input[type="text"],
+select,
+textarea {
+    background: #100e15;
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    color: var(--texto);
+    padding: 9px 11px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    width: 100%;
+}
+
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--roxo);
+    outline-offset: 1px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+fieldset.caixas {
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    min-width: 220px;
+}
+
+.caixa {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.92rem;
+    color: var(--texto);
+    cursor: pointer;
+}
+
+.caixa input {
+    accent-color: var(--roxo);
+}
+
+.campo-botoes {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+/* ------------------------------ Botões ------------------------------ */
+
+.botao {
+    display: inline-block;
+    background: var(--roxo);
+    color: #fff;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 9px 16px;
+    font-size: 0.92rem;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.botao:hover {
+    filter: brightness(1.15);
+    text-decoration: none;
+}
+
+.botao[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.botao.secundario {
+    background: transparent;
+    border-color: var(--borda);
+    color: var(--texto);
+}
+
+.botao.texto {
+    background: transparent;
+    color: var(--texto-suave);
+    padding: 7px 10px;
+}
+
+.botao.texto:hover {
+    color: var(--texto);
+}
+
+.botao.perigo {
+    color: var(--perigo);
+}
+
+.estrela {
+    background: none;
+    border: none;
+    color: var(--texto-suave);
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 2px;
+}
+
+.estrela.marcada {
+    color: var(--destaque);
+}
+
+/* ------------------------------ Cartas ------------------------------ */
+
+.grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 16px;
+}
+
+.carta {
+    background: var(--fundo-carta);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.carta-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.selo-nivel {
+    background: #100e15;
+    border: 1px solid var(--destaque);
+    color: var(--destaque-claro);
+    border-radius: 999px;
+    padding: 2px 11px;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.carta-titulo {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.carta-titulo a {
+    color: var(--texto);
+}
+
+.carta-resumo {
+    margin: 0;
+    color: var(--texto-suave);
+    font-size: 0.85rem;
+}
+
+.carta-descricao {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #cdc6dd;
+}
+
+.carta-classes {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--texto-suave);
+    font-style: italic;
+}
+
+.carta-acoes {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px solid var(--borda);
+}
+
+.carta-acoes form {
+    margin: 0;
+}
+
+/* ------------------------------ Etiquetas ------------------------------ */
+
+.etiquetas {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 0;
+    padding: 0;
+}
+
+.etiqueta {
+    background: #100e15;
+    border: 1px solid var(--borda);
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 0.74rem;
+    color: var(--texto-suave);
+}
+
+.etiqueta.destaque {
+    border-color: var(--roxo);
+    color: #c3b0f0;
+}
+
+.etiqueta.api {
+    border-color: var(--sucesso);
+    color: var(--sucesso);
+}
+
+/* ------------------------------ Fichas ------------------------------ */
+
+.ficha,
+.ficha-curta {
+    display: grid;
+    gap: 8px 18px;
+    margin: 8px 0 0;
+}
+
+.ficha {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.ficha-curta {
+    grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
+}
+
+.ficha dt,
+.ficha-curta dt {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--texto-suave);
+}
+
+.ficha dd,
+.ficha-curta dd {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.pergaminho {
+    border-left: 3px solid var(--destaque);
+}
+
+.texto-longo {
+    white-space: pre-line;
+    margin: 0;
+    color: #ddd7ea;
+}
+
+.anotacao {
+    background: #100e15;
+    border-left: 3px solid var(--roxo);
+    padding: 10px 12px;
+    border-radius: 0 8px 8px 0;
+}
+
+/* ------------------------------ Mensagens ------------------------------ */
+
+.mensagens:empty {
+    display: none;
+}
+
+.aviso {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.92rem;
+    border: 1px solid var(--borda);
+    background: var(--fundo-painel);
+    margin: 0 0 14px;
+}
+
+.aviso.sucesso {
+    border-color: var(--sucesso);
+    color: var(--sucesso);
+}
+
+.aviso.atencao {
+    border-color: var(--destaque);
+    color: var(--destaque-claro);
+}
+
+.aviso.erro {
+    border-color: var(--perigo);
+    color: var(--perigo);
+}
+
+.vazio {
+    background: var(--fundo-painel);
+    border: 1px dashed var(--borda);
+    border-radius: 12px;
+    padding: 26px;
+    text-align: center;
+    color: var(--texto-suave);
+}
+
+/* ------------------------------ Rodapé ------------------------------ */
+
+.rodape {
+    border-top: 1px solid var(--borda);
+    color: var(--texto-suave);
+    font-size: 0.82rem;
+    text-align: center;
+    padding: 18px 20px 30px;
+}
+
+@media (max-width: 600px) {
+    .cabecalho-pagina {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .campo {
+        min-width: 100%;
+    }
+}

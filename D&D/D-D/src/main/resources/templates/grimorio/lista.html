@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: cabecalho('Meu Grimório')}"></head>
+
+<body>
+
+    <header th:replace="~{fragments/layout :: menu('grimorio')}"></header>
+
+    <main class="conteudo">
+
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <section class="cabecalho-pagina">
+            <div>
+                <h1>Meu Grimório</h1>
+                <p class="legenda">
+                    <span th:text="${total}">0</span> magia(s) guardadas no banco de dados,
+                    sendo <span th:text="${totalDeTruques}">0</span> truque(s).
+                </p>
+            </div>
+            <div class="acoes-cabecalho">
+                <a class="botao" th:href="@{/buscar}">Buscar na API</a>
+                <a class="botao secundario" th:href="@{/grimorio/nova}">Cadastrar manualmente</a>
+            </div>
+        </section>
+
+        <!-- ===================== FILTROS ===================== -->
+        <form class="painel filtros" method="get" th:action="@{/grimorio}">
+            <div class="campo">
+                <label for="nome">Nome</label>
+                <input type="text" id="nome" name="nome" placeholder="ex.: Bola de Fogo" th:value="${filtroNome}">
+            </div>
+
+            <div class="campo">
+                <label for="classe">Classe</label>
+                <select id="classe" name="classe">
+                    <option value="">Todas</option>
+                    <option th:each="c : ${classes}" th:value="${c.indice}" th:text="${c.nome}"
+                        th:selected="${filtroClasse != null and filtroClasse == c.indice}"></option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="nivel">Nível</label>
+                <select id="nivel" name="nivel">
+                    <option value="">Todos</option>
+                    <option value="0" th:selected="${filtroNivel != null and filtroNivel == 0}">Truque</option>
+                    <option th:each="n : ${#numbers.sequence(1, 9)}" th:value="${n}" th:text="${n} + 'º círculo'"
+                        th:selected="${filtroNivel != null and filtroNivel == n}"></option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="componente">Componente</label>
+                <select id="componente" name="componente">
+                    <option value="">Qualquer</option>
+                    <option th:each="comp : ${componentesDisponiveis}" th:value="${comp.sigla}"
+                        th:text="${comp.sigla} + ' · ' + ${comp.nome}"
+                        th:selected="${filtroComponente != null and filtroComponente == comp.sigla}"></option>
+                </select>
+            </div>
+
+            <div class="campo-botoes">
+                <button type="submit" class="botao">Filtrar</button>
+                <a class="botao texto" th:href="@{/grimorio}">Limpar</a>
+            </div>
+        </form>
+
+        <!-- ===================== LISTA ===================== -->
+        <p class="vazio" th:if="${#lists.isEmpty(magias)}">
+            Nenhuma magia encontrada com esses filtros.
+            <a th:href="@{/buscar}">Busque magias na API</a> para começar seu grimório.
+        </p>
+
+        <div class="grade" th:unless="${#lists.isEmpty(magias)}">
+            <article class="carta" th:each="magia : ${magias}" th:attr="data-magia-id=${magia.id}">
+
+                <div class="carta-topo">
+                    <span class="selo-nivel" th:text="${magia.nivelFormatado}">Truque</span>
+                    <button type="button" class="estrela" th:attr="data-preparar=${magia.id}"
+                        title="Marcar como preparada neste navegador">☆</button>
+                </div>
+
+                <h2 class="carta-titulo">
+                    <a th:href="@{/grimorio/{id}(id=${magia.id})}" th:text="${magia.nome}">Nome</a>
+                </h2>
+                <p class="carta-resumo" th:text="${magia.resumo}">Escola - nível</p>
+
+                <ul class="etiquetas">
+                    <li class="etiqueta" th:each="comp : ${magia.listaComponentes}" th:text="${comp.sigla}"
+                        th:title="${comp.nome}">V</li>
+                    <li class="etiqueta destaque" th:if="${magia.ritual}">Ritual</li>
+                    <li class="etiqueta destaque" th:if="${magia.concentracao}">Concentração</li>
+                    <li class="etiqueta api" th:if="${magia.origemApi}">API</li>
+                </ul>
+
+                <p class="carta-classes" th:text="${magia.classesFormatadas}">Classes</p>
+
+                <div class="carta-acoes">
+                    <a class="botao texto" th:href="@{/grimorio/{id}(id=${magia.id})}">Ver</a>
+                    <a class="botao texto" th:href="@{/grimorio/{id}/editar(id=${magia.id})}">Editar</a>
+                    <form method="post" th:action="@{/grimorio/{id}/excluir(id=${magia.id})}"
+                        onsubmit="return confirm('Remover esta magia do grimório?');">
+                        <button type="submit" class="botao texto perigo">Excluir</button>
+                    </form>
+                </div>
+            </article>
+        </div>
+
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+    <script th:src="@{/js/preparadas.js}"></script>
+</body>
+
+</html>

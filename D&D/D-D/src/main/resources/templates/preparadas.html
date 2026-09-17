@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: cabecalho('Preparadas')}"></head>
+
+<body>
+
+    <header th:replace="~{fragments/layout :: menu('preparadas')}"></header>
+
+    <main class="conteudo">
+
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <section class="cabecalho-pagina">
+            <div>
+                <h1>Favoritas / Magias Preparadas</h1>
+                <p class="legenda">
+                    Esta seleção fica salva no <strong>seu navegador</strong> (localStorage),
+                    então ela sobrevive a recarregamentos e não interfere no grimório dos outros jogadores.
+                </p>
+            </div>
+            <div class="acoes-cabecalho">
+                <button type="button" class="botao texto perigo" data-limpar-preparadas>Limpar seleção</button>
+            </div>
+        </section>
+
+        <p class="vazio" data-vazio-preparadas hidden>
+            Você ainda não marcou nenhuma magia. Vá até o
+            <a th:href="@{/grimorio}">seu grimório</a> e clique na estrela ☆ das magias
+            que pretende preparar hoje.
+        </p>
+
+        <p class="vazio" th:if="${#lists.isEmpty(magias)}">
+            Seu grimório está vazio. <a th:href="@{/buscar}">Busque magias na API</a> primeiro.
+        </p>
+
+        <div class="grade" data-lista-preparadas>
+            <article class="carta" th:each="magia : ${magias}" th:attr="data-magia-id=${magia.id}" hidden>
+
+                <div class="carta-topo">
+                    <span class="selo-nivel" th:text="${magia.nivelFormatado}">Truque</span>
+                    <button type="button" class="estrela" th:attr="data-preparar=${magia.id}"
+                        title="Desmarcar">★</button>
+                </div>
+
+                <h2 class="carta-titulo">
+                    <a th:href="@{/grimorio/{id}(id=${magia.id})}" th:text="${magia.nome}">Nome</a>
+                </h2>
+                <p class="carta-resumo" th:text="${magia.resumo}">Escola - nível</p>
+
+                <ul class="etiquetas">
+                    <li class="etiqueta" th:each="comp : ${magia.listaComponentes}" th:text="${comp.sigla}"
+                        th:title="${comp.nome}">V</li>
+                    <li class="etiqueta destaque" th:if="${magia.concentracao}">Concentração</li>
+                </ul>
+
+                <dl class="ficha-curta">
+                    <div>
+                        <dt>Conjuração</dt>
+                        <dd th:text="${magia.tempoConjuracao} ?: '—'">1 ação</dd>
+                    </div>
+                    <div>
+                        <dt>Alcance</dt>
+                        <dd th:text="${magia.alcance} ?: '—'">18 m</dd>
+                    </div>
+                </dl>
+
+                <p class="carta-descricao" th:text="${#strings.abbreviate(magia.descricao, 200)}">Descrição...</p>
+            </article>
+        </div>
+
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+    <script th:src="@{/js/preparadas.js}"></script>
+</body>
+
+</html>
