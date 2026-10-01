@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Magia</title>
+    <link rel="stylesheet" href="/css/estilo.css">
+</head>
+<body>
+
+<nav th:replace="~{menu :: menu}"></nav>
+
+<h1>Cadastrar / Editar Magia</h1>
+
+<!-- Esse MESMO formulário serve para cadastrar E editar. A diferença é
+     só o conteúdo do campo "id" escondido logo abaixo:
+       - vazio  -> o controller entende que é uma magia NOVA
+       - preenchido -> o controller entende que é para ATUALIZAR
+
+     th:object="${magia}" liga esse formulário inteiro ao objeto Magia
+     que veio do controller (seja um novo, seja um que já existia). -->
+<form method="post" action="/magias/salvar" th:object="${magia}">
+
+    <!-- type="hidden" = campo invisível na tela, mas que ainda é
+         enviado junto com o formulário -->
+    <input type="hidden" th:field="*{id}">
+
+    <!-- th:field="*{nome}" faz duas coisas ao mesmo tempo:
+         1) preenche o campo com o valor atual de magia.nome (se já existir)
+         2) dá o name="nome" certinho, para o Spring saber ligar esse
+            campo com o atributo "nome" da classe Magia quando o
+            formulário for enviado -->
+    <label>Nome</label>
+    <input type="text" th:field="*{nome}" required>
+
+    <label>Nível (0 a 9)</label>
+    <input type="number" th:field="*{nivel}" min="0" max="9">
+
+    <label>Escola</label>
+    <input type="text" th:field="*{escola}">
+
+    <label>Tempo de conjuração</label>
+    <input type="text" th:field="*{tempoConjuracao}">
+
+    <label>Alcance</label>
+    <input type="text" th:field="*{alcance}">
+
+    <label>Duração</label>
+    <input type="text" th:field="*{duracao}">
+
+    <label>Componentes (ex: V, S, M)</label>
+    <input type="text" th:field="*{componentes}">
+
+    <label>Classes</label>
+    <input type="text" th:field="*{classes}">
+
+    <label>Descrição</label>
+    <textarea th:field="*{descricao}" rows="6"></textarea>
+
+    <button type="submit">Salvar</button>
+    <a href="/magias">Cancelar</a>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!--
+  Esse arquivo não é uma página sozinha. Ele é um "pedacinho" de HTML
+  que as outras páginas reaproveitam, para não precisar copiar e colar
+  o mesmo menu em todo arquivo.
+
+  th:fragment="menu" dá um nome para esse pedaço. Nas outras páginas,
+  a gente "chama" esse pedaço assim:
+     <nav th:replace="~{menu :: menu}"></nav>
+  Isso quer dizer: "pegue o fragmento chamado menu, do arquivo menu.html,
+  e coloque aqui".
+-->
+<nav th:fragment="menu">
+    <a href="/magias">Meu Grimório</a>
+    <a href="/buscar">Buscar Magias</a>
+    <a href="/preparadas">Preparadas</a>
+</nav>

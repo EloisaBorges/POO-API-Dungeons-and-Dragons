@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Magias</title>
+    <link rel="stylesheet" href="/css/estilo.css">
+</head>
+<body>
+
+<nav th:replace="~{menu :: menu}"></nav>
+
+<h1>Buscar Magias na API</h1>
+
+<p th:if="${erro}" class="erro" th:text="${erro}"></p>
+
+<!-- Igual ao filtro do grimório, mas esse manda a busca lá pro
+     BuscaController, que vai perguntar pra API externa -->
+<form method="get" action="/buscar" class="filtros">
+    <select name="classe">
+        <option value="">classe</option>
+        <!-- O "value" de cada opção é o nome em INGLÊS que a API espera
+             (ex: wizard), já o texto mostrado na tela é em português -->
+        <option value="wizard" th:selected="${classe == 'wizard'}">Mago</option>
+        <option value="cleric" th:selected="${classe == 'cleric'}">Clérigo</option>
+        <option value="bard" th:selected="${classe == 'bard'}">Bardo</option>
+        <option value="druid" th:selected="${classe == 'druid'}">Druida</option>
+        <option value="sorcerer" th:selected="${classe == 'sorcerer'}">Feiticeiro</option>
+        <option value="warlock" th:selected="${classe == 'warlock'}">Bruxo</option>
+        <option value="paladin" th:selected="${classe == 'paladin'}">Paladino</option>
+        <option value="ranger" th:selected="${classe == 'ranger'}">Patrulheiro</option>
+    </select>
+
+    <select name="nivel">
+        <option value="">nível</option>
+        <option value="0" th:selected="${nivel == 0}">Truque</option>
+        <option th:each="n : ${#numbers.sequence(1, 9)}" th:value="${n}" th:text="${n}"
+                th:selected="${nivel == n}"></option>
+    </select>
+
+    <button type="submit">Buscar</button>
+</form>
+
+<!-- Primeira visita na tela: ainda não escolheu nada -->
+<p th:if="${magias != null and #lists.isEmpty(magias) and classe == null and nivel == null}">
+    Escolha uma classe ou um nível e clique em Buscar.
+</p>
+
+<!-- Buscou, mas a API não devolveu nada -->
+<p th:if="${magias != null and #lists.isEmpty(magias) and (classe != null or nivel != null)}">
+    Nenhuma magia encontrada.
+</p>
+
+<!-- Repare: aqui "magia" NÃO é um objeto Magia do nosso banco, é um
+     Map que veio direto do JSON da API. Por isso acessamos os campos
+     com os nomes EXATOS do JSON (magia.name, magia.level...) em vez
+     dos nomes em português que usamos no nosso banco. -->
+<div th:each="magia : ${magias}" class="carta">
+    <h3 th:text="${magia.name}">Nome</h3>
+    <p th:text="'Nível ' + ${magia.level} + ' - ' + ${magia.school.name}"></p>
+    <p th:text="'Conjuração: ' + ${magia.casting_time} + ' | Alcance: ' + ${magia.range}"></p>
+
+    <!-- magia.desc é uma LISTA de parágrafos que veio da API.
+         Aqui mostramos só o primeiro parágrafo, cortado em 200 letras
+         com #strings.abbreviate, para não lotar a tela. -->
+    <p th:text="${#strings.abbreviate(magia.desc[0], 200)}"></p>
+
+    <!-- Esse botão não edita nada ainda: ele só manda o "index" da
+         magia (escondido no input hidden) pro BuscaController.importar(),
+         que busca o detalhe de novo e agora sim salva no nosso banco. -->
+    <form method="post" action="/buscar/importar">
+        <input type="hidden" name="indice" th:value="${magia.index}">
+        <button type="submit">Adicionar ao grimório</button>
+    </form>
+</div>
+
+</body>
+</html>
