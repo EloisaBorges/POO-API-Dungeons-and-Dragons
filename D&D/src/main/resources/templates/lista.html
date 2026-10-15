@@ -15,6 +15,7 @@
 <p th:if="${erro}" class="erro" th:text="${erro}"></p>
 
 <form method="get" action="/magias" class="filtros">
+    <input type="text" name="nome" placeholder="nome da magia" th:value="${nome}">
     <input type="text" name="classe" placeholder="classe (ex: wizard)" th:value="${classe}">
 
     <select name="nivel">
@@ -43,8 +44,15 @@
 <div th:each="magia : ${magias}" class="carta">
     <h3 th:text="${magia.nome}">Nome</h3>
     <p th:text="'Nível ' + ${magia.nivel} + ' - ' + ${magia.escola}"></p>
+    <p th:text="'Tempo de conjuração: ' + ${magia.tempoConjuracao}"></p>
+    <p th:text="'Alcance: ' + ${magia.alcance}"></p>
+    <p th:text="'Duração: ' + ${magia.duracao}"></p>
     <p th:text="'Componentes: ' + ${magia.componentes}"></p>
     <p th:text="'Classes: ' + ${magia.classes}"></p>
+    <details th:unless="${#strings.isEmpty(magia.descricao)}">
+        <summary>Ver descrição</summary>
+        <p class="descricao" th:text="${magia.descricao}"></p>
+    </details>
     <a th:href="@{/magias/{id}/editar(id=${magia.id})}">Editar</a>
     <form th:action="@{/magias/{id}/excluir(id=${magia.id})}" method="post" style="display:inline"
           onsubmit="return confirm('Excluir esta magia?')">

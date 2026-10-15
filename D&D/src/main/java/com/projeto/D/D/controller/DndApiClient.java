@@ -11,6 +11,11 @@ public class DndApiClient {
     private final RestTemplate rest = new RestTemplate();
     private final String base = "https://www.dnd5eapi.co/api";
 
+    public List<Map> listarPorNome(String nome) {
+        Map resposta = rest.getForObject(base + "/spells?name={nome}", Map.class, nome);
+        return (List<Map>) resposta.get("results");
+    }
+
     public List<Map> listarPorClasse(String classe) {
         Map resposta = rest.getForObject(base + "/classes/" + classe + "/spells", Map.class);
         return (List<Map>) resposta.get("results");

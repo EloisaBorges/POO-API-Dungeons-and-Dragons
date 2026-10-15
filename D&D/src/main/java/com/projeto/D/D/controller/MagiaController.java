@@ -24,7 +24,8 @@ public class MagiaController {
     }
 
     @GetMapping
-    public String listar(@RequestParam(required = false) String classe,
+    public String listar(@RequestParam(required = false) String nome,
+                         @RequestParam(required = false) String classe,
                          @RequestParam(required = false) Integer nivel,
                          @RequestParam(required = false) String componente,
                          Model model) {
@@ -35,6 +36,11 @@ public class MagiaController {
         for (Magia magia : todas) {
             boolean ok = true;
 
+            if (nome != null && !nome.isBlank()) {
+                if (magia.getNome() == null || !magia.getNome().toLowerCase().contains(nome.toLowerCase())) {
+                    ok = false;
+                }
+            }
             if (classe != null && !classe.isBlank()) {
                 if (magia.getClasses() == null || !magia.getClasses().toLowerCase().contains(classe.toLowerCase())) {
                     ok = false;
@@ -54,6 +60,7 @@ public class MagiaController {
         }
 
         model.addAttribute("magias", filtradas);
+        model.addAttribute("nome", nome);
         model.addAttribute("classe", classe);
         model.addAttribute("nivel", nivel);
         model.addAttribute("componente", componente);

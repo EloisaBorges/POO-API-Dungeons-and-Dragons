@@ -24,26 +24,40 @@ public class BuscaController {
     }
 
     @GetMapping("/buscar")
-    public String buscar(@RequestParam(required = false) String classe,
+    public String buscar(@RequestParam(required = false) String nome,
+                         @RequestParam(required = false) String classe,
                          @RequestParam(required = false) Integer nivel,
                          Model model) {
 
         List<Map> encontradas = new ArrayList<>();
+        boolean buscou = false;
 
         try {
-            if (classe != null && !classe.isBlank()) {
-                List<Map> referencias = api.listarPorClasse(classe);
-                for (Map referencia : referencias) {
-                    Map detalhe = api.detalhar((String) referencia.get("index"));
-                    if (detalhe != null && (nivel == null || nivel.equals(detalhe.get("level")))) {
-                        encontradas.add(detalhe);
-                    }
-                }
+            List<Map> referencias = null;
+
+            if (nome != null && !nome.isBlank()) {
+                referencias = api.listarPorNome(nome);
+            } else if (classe != null && !classe.isBlank()) {
+                referencias = api.listarPorClasse(classe);
             } else if (nivel != null) {
-                List<Map> referencias = api.listarPorNivel(nivel);
+                referencias = api.listarPorNivel(nivel);
+            }
+
+            if (referencias != null) {
+                buscou = true;
+
                 for (Map referencia : referencias) {
                     Map detalhe = api.detalhar((String) referencia.get("index"));
-                    if (detalhe != null) {
+                    boolean ok = detalhe != null;
+
+                    // Depois confere os outros filtros que o usuário escolheu.
+                    if (ok && nivel != null && !nivel.equals(detalhe.get("level"))) {
+                        ok = false;
+                    }
+                    if (ok && classe != null && !classe.isBlank() && !temClasse(detalhe, classe)) {
+                        ok = false;
+                    }
+                    if (ok) {
                         encontradas.add(detalhe);
                     }
                 }
@@ -53,9 +67,23 @@ public class BuscaController {
         }
 
         model.addAttribute("magias", encontradas);
+        model.addAttribute("buscou", buscou);
+        model.addAttribute("nome", nome);
         model.addAttribute("classe", classe);
         model.addAttribute("nivel", nivel);
         return "busca";
+    }
+
+    private boolean temClasse(Map detalhe, String classe) {
+        List<Map> classes = (List<Map>) detalhe.get("classes");
+        if (classes != null) {
+            for (Map c : classes) {
+                if (classe.equals(c.get("index"))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @PostMapping("/buscar/importar")

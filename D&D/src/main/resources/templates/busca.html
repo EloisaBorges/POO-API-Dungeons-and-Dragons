@@ -14,6 +14,8 @@
 <p th:if="${erro}" class="erro" th:text="${erro}"></p>
 
 <form method="get" action="/buscar" class="filtros">
+    <input type="text" name="nome" placeholder="nome (em inglês)" th:value="${nome}">
+
     <select name="classe">
         <option value="">classe</option>
         <option value="wizard" th:selected="${classe == 'wizard'}">Mago</option>
@@ -36,19 +38,25 @@
     <button type="submit">Buscar</button>
 </form>
 
-<p th:if="${magias != null and #lists.isEmpty(magias) and classe == null and nivel == null}">
-    Escolha uma classe ou um nível e clique em Buscar.
+<p th:if="${!buscou and erro == null}">
+    Digite um nome, escolha uma classe ou um nível e clique em Buscar.
 </p>
 
-<p th:if="${magias != null and #lists.isEmpty(magias) and (classe != null or nivel != null)}">
+<p th:if="${buscou and erro == null and #lists.isEmpty(magias)}">
     Nenhuma magia encontrada.
 </p>
 
 <div th:each="magia : ${magias}" class="carta">
     <h3 th:text="${magia.name}">Nome</h3>
     <p th:text="'Nível ' + ${magia.level} + ' - ' + ${magia.school.name}"></p>
-    <p th:text="'Conjuração: ' + ${magia.casting_time} + ' | Alcance: ' + ${magia.range}"></p>
-    <p th:text="${#strings.abbreviate(magia.desc[0], 200)}"></p>
+    <p th:text="'Tempo de conjuração: ' + ${magia.casting_time}"></p>
+    <p th:text="'Alcance: ' + ${magia.range}"></p>
+    <p th:text="'Duração: ' + ${magia.duration}"></p>
+    <p th:text="'Componentes: ' + ${#strings.listJoin(magia.components, ', ')}"></p>
+    <details>
+        <summary>Ver descrição</summary>
+        <p class="descricao" th:each="paragrafo : ${magia.desc}" th:text="${paragrafo}"></p>
+    </details>
 
     <form method="post" action="/buscar/importar">
         <input type="hidden" name="indice" th:value="${magia.index}">
