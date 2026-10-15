@@ -35,13 +35,12 @@
     <a href="/magias">Limpar</a>
 </form>
 
-<a href="/magias/nova">+ Nova magia</a>
-<a href="/buscar">Buscar na API</a>
+<a href="/magias/nova" class="botao">+ Nova magia</a>
+<a href="/buscar" class="botao">Buscar na API</a>
 
 <p th:if="${#lists.isEmpty(magias)}">Nenhuma magia encontrada.</p>
 
 <div th:each="magia : ${magias}" class="carta">
-    <button class="favorito" th:attr="data-id=${magia.id}" onclick="alternar(this.getAttribute('data-id'))">☆</button>
     <h3 th:text="${magia.nome}">Nome</h3>
     <p th:text="'Nível ' + ${magia.nivel} + ' - ' + ${magia.escola}"></p>
     <p th:text="'Componentes: ' + ${magia.componentes}"></p>
@@ -53,6 +52,5 @@
     </form>
 </div>
 
-<script src="/js/preparadas.js"></script>
 </body>
 </html>

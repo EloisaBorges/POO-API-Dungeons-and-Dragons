@@ -60,6 +60,11 @@ public class BuscaController {
 
     @PostMapping("/buscar/importar")
     public String importar(@RequestParam String indice, RedirectAttributes attrs) {
+        if (repository.existsByIndiceApi(indice)) {
+            attrs.addFlashAttribute("erro", "Essa magia já está no grimório.");
+            return "redirect:/magias";
+        }
+
         Map detalhe = api.detalhar(indice);
         if (detalhe == null) {
             attrs.addFlashAttribute("erro", "Não foi possível importar essa magia.");

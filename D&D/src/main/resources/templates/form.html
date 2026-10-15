@@ -11,14 +11,14 @@
 
 <h1>Cadastrar / Editar Magia</h1>
 
-<form method="post" action="/magias/salvar" th:object="${magia}">
+<form method="post" action="/magias/salvar" th:object="${magia}" class="ficha">
     <input type="hidden" th:field="*{id}">
 
     <label>Nome</label>
     <input type="text" th:field="*{nome}" required>
 
     <label>Nível (0 a 9)</label>
-    <input type="number" th:field="*{nivel}" min="0" max="9">
+    <input type="number" th:field="*{nivel}" min="0" max="9" required>
 
     <label>Escola</label>
     <input type="text" th:field="*{escola}">

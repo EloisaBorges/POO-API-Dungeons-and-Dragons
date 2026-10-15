@@ -5,18 +5,18 @@ Trabalho de POO - 3º Bimestre - IFPR Cascavel.
 ## Integrantes
 
 - Eloísa Borges
-- (nome da dupla)
+- Kamile Kortz
 
 ## Tema
 
-App para jogadores de D&D guardarem suas magias favoritas. Dá pra buscar
-magias numa API, salvar no banco e marcar quais estão preparadas.
+Aplicação para jogadores de D&D guardarem suas magias. Dá para cadastrar
+magias na mão ou buscar numa API e salvar no banco de dados.
 
-## Telas
+## Descrição do sistema
 
-- `/magias` - lista as magias salvas, com filtro por classe, nível e componente. Dá pra cadastrar, editar e excluir.
-- `/buscar` - busca magias direto na API, por classe e nível. Dá pra importar pro grimório.
-- `/preparadas` - mostra só as magias marcadas com estrela. Essa marcação fica salva no navegador (localStorage).
+- `/magias` - lista as magias salvas, com filtro por classe, nível e componente.
+  Dá para cadastrar, editar e excluir (CRUD).
+- `/buscar` - busca magias na API por classe e/ou nível e mostra o resultado na tela.
 
 ## API usada
 
@@ -24,35 +24,55 @@ magias numa API, salvar no banco e marcar quais estão preparadas.
 - Documentação: https://5e-bits.github.io/docs/api
 
 Rotas usadas:
-- `GET /api/classes/{classe}/spells`
-- `GET /api/spells?level={nivel}`
-- `GET /api/spells/{indice}`
+- `GET /api/classes/{classe}/spells` - lista as magias de uma classe
+- `GET /api/spells?level={nivel}` - lista as magias de um nível
+- `GET /api/spells/{indice}` - detalhes de uma magia
+
+## Funcionalidade feita com a API
+
+O usuário escolhe uma classe e/ou um nível na tela de busca. A aplicação
+consulta a API, recebe o JSON e mostra para cada magia o nome, nível, escola,
+tempo de conjuração, alcance e um resumo da descrição. Em cada resultado tem o
+botão **Adicionar ao grimório**, que pega os dados da API, monta um objeto
+`Magia` e salva no banco de dados. Se a magia já foi adicionada antes, a
+aplicação avisa e não salva de novo.
 
 ## Tecnologias
 
-- Java + Spring Boot
+- Java 17 + Spring Boot
 - Spring Web + Spring Data JPA
-- Banco H2 (arquivo, fica salvo em `dados/`)
+- Banco H2 (arquivo, fica salvo na pasta `dados/`)
 - Thymeleaf + HTML
+
+## Estrutura (MVC)
+
+- `model/Magia.java` - entidade
+- `repository/MagiaRepository.java` - JpaRepository
+- `controller/` - controllers (`MagiaController` faz o CRUD, `BuscaController` usa a API)
+- `controller/DndApiClient.java` - classe que faz as chamadas HTTP para a API
+- `resources/templates/` - páginas Thymeleaf
 
 ## Como rodar
 
 Entrar na pasta do projeto:
 
 ```
-cd "D&D/D-D"
+cd "D&D"
 ```
 
-Rodar:
-
-```
-./mvnw spring-boot:run
-```
-
-No Windows:
+Windows:
 
 ```
 mvnw.cmd spring-boot:run
 ```
 
+Linux / Mac:
+
+```
+sh mvnw spring-boot:run
+```
+
+Também dá para abrir a pasta `D&D` na IDE e rodar a classe `Application`.
+
 Depois é só abrir `http://localhost:8080` no navegador.
+(Precisa de internet para a busca na API funcionar.)
